@@ -1,66 +1,57 @@
-package com.example.todomate.Fragments;
+package com.example.todomate;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 
-import androidx.fragment.app.Fragment;
+import java.util.Calendar;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+public class DatePickerFragment extends DialogFragment {
 
-import com.example.todomate.R;
+    private OnDateSelectedListener listener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DatePickerFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class DatePickerFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public DatePickerFragment() {
-        // Required empty public constructor
+    public interface OnDateSelectedListener {
+        void onDateSelected(Calendar selectedDate);
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DatePickerFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DatePickerFragment newInstance(String param1, String param2) {
-        DatePickerFragment fragment = new DatePickerFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        return new DatePickerDialog(
+                requireContext(),
+                (view, year1, monthOfYear, dayOfMonth) -> {
+                    Calendar selectedDate = Calendar.getInstance();
+                    selectedDate.set(year1, monthOfYear, dayOfMonth);
+                    if (listener != null) {
+                        listener.onDateSelected(selectedDate);
+                    }
+                },
+                year,
+                month,
+                day
+        );
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onAttach(@NonNull android.content.Context context) {
+        super.onAttach(context);
+        if (context instanceof OnDateSelectedListener) {
+            listener = (OnDateSelectedListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnDateSelectedListener");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_date_picker, container, false);
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
     }
 }

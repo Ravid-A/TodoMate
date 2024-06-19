@@ -1,5 +1,6 @@
 package com.example.todomate;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         setupRecyclerView();
+        
+        binding.fabAddTask.setOnClickListener(v -> showAddTaskActivity());
     }
 
     private void setupRecyclerView() {
@@ -36,5 +39,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(taskAdapter);
 
         taskViewModel.getTasks().observe(this, tasks -> taskAdapter.setTasks(tasks));
+    }
+    
+    private void showAddTaskActivity() {
+        // Add an Intent to start the AddTaskActivity
+        Intent intent = new Intent(this, AddTaskActivity.class);
+        startActivity(intent);
     }
 }

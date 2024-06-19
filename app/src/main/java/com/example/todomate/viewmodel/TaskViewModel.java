@@ -27,5 +27,8 @@ public class TaskViewModel extends ViewModel {
         return tasks;
     }
 
+    public void addTask(Task task) {
+    }
+
     // Add other methods to update, add, or delete tasks as needed
 }
