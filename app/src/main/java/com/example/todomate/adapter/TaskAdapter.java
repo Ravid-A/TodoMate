@@ -16,7 +16,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, tasks.size());
     }
 
     @NonNull
@@ -37,7 +37,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         return tasks != null ? tasks.size() : 0;
     }
 
-    static class TaskViewHolder extends RecyclerView.ViewHolder {
+    public static class TaskViewHolder extends RecyclerView.ViewHolder {
         private ItemTaskBinding binding;
 
         public TaskViewHolder(@NonNull ItemTaskBinding binding) {
