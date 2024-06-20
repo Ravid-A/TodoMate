@@ -48,4 +48,27 @@
     <string name="task_updated_success">Task updated successfully</string>
     <string name="task_deleted_success">Task deleted successfully</string>
     <string name="action_button">Action Button</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+
+    <!-- Forgot Password -->
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="profile">Profile</string>
+    <string name="user_email">User Email</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="change_password">Change Password</string>
+    <string name="connected_as">Connected as:</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="enter_your_email">Enter your email address below to receive a password reset link.</string>
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="set_reminder">Set Reminder</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="new_password">New Password</string>
+    <string name="current_password">Current Password</string>
+    <string name="enter_data_change_password">Enter your current password and new password to change your password.</string>
 </resources>

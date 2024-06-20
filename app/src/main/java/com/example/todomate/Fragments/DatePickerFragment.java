@@ -1,9 +1,15 @@
 package com.example.todomate;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
@@ -11,32 +17,36 @@ import java.util.Calendar;
 public class DatePickerFragment extends DialogFragment {
 
     private OnDateSelectedListener listener;
+    private DatePicker datePicker;
 
     public interface OnDateSelectedListener {
         void onDateSelected(Calendar selectedDate);
     }
 
-    @NonNull
+    @Nullable
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_date_picker, container, false);
 
-        return new DatePickerDialog(
-                requireContext(),
-                (view, year1, monthOfYear, dayOfMonth) -> {
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.set(year1, monthOfYear, dayOfMonth);
-                    if (listener != null) {
-                        listener.onDateSelected(selectedDate);
-                    }
-                },
-                year,
-                month,
-                day
-        );
+        datePicker = view.findViewById(R.id.datePicker);
+        Button setDueDateButton = view.findViewById(R.id.setDueDateButton);
+
+        setDueDateButton.setOnClickListener(v -> {
+            int year = datePicker.getYear();
+            int month = datePicker.getMonth();
+            int day = datePicker.getDayOfMonth();
+
+            Calendar selectedDate = Calendar.getInstance();
+            selectedDate.set(year, month, day);
+
+            if (listener != null) {
+                listener.onDateSelected(selectedDate);
+            }
+
+            dismiss();
+        });
+
+        return view;
     }
 
     @Override

@@ -13,15 +13,15 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <CheckBox
-        android:id="@+id/checkBoxReminder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/reminder_checkbox" />
-
     <TimePicker
         android:id="@+id/timePicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/buttonSetReminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/set_reminder"/>
 
 </LinearLayout>

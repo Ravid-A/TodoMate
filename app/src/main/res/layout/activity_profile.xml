@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/userConnectedAs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/connected_as"
+            android:textSize="32sp"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/userEmailTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user_email"
+            android:layout_below="@id/userConnectedAs"
+            android:textSize="32sp"
+            android:layout_centerInParent="true"/>
+
+        <Button
+            android:id="@+id/deleteAccountButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete_account"
+            android:layout_below="@id/userEmailTextView"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:id="@+id/changePasswordButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/change_password"
+            android:layout_below="@id/deleteAccountButton"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"/>
+
+    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

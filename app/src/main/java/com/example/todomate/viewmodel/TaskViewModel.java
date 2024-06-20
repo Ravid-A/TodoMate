@@ -1,34 +1,41 @@
 package com.example.todomate.viewmodel;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.todomate.model.Task;
+import com.example.todomate.model.TodoTask;
+import com.example.todomate.model.TodoTaskData;
 import com.example.todomate.repository.TaskRepository;
+
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
 
 public class TaskViewModel extends ViewModel {
-    private MutableLiveData<List<Task>> tasks;
-    private TaskRepository repository;
+
+    private final TaskRepository taskRepository;
 
     public TaskViewModel() {
-        repository = TaskRepository.getInstance();
-        tasks = new MutableLiveData<>();
-        loadTasks();
+        taskRepository = new TaskRepository();
     }
 
-    private void loadTasks() {
-        tasks.setValue(repository.getTasks());
+    public LiveData<List<TodoTaskData>> getTasks() {
+        return taskRepository.getTasks();
     }
 
-    public LiveData<List<Task>> getTasks() {
-        return tasks;
+    public Task<DocumentReference> addTask(TodoTask task) {
+        return taskRepository.addTask(task);
     }
 
-    public void addTask(Task task) {
+    public Task<DocumentSnapshot> getTaskData(String id) {
+        return taskRepository.getTaskData(id);
     }
 
-    // Add other methods to update, add, or delete tasks as needed
+    public Task<Void> updateTask(TodoTaskData task) {
+        return taskRepository.updateTask(task);
+    }
 }

@@ -1,22 +1,24 @@
 package com.example.todomate.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.todomate.TaskDetailActivity;
 import com.example.todomate.databinding.ItemTaskBinding;
-import com.example.todomate.model.Task;
+import com.example.todomate.model.TodoTaskData;
 
 import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
-    private List<Task> tasks;
+    private List<TodoTaskData> tasks;
 
-    public void setTasks(List<Task> tasks) {
+    public void setTasks(List<TodoTaskData> tasks) {
         this.tasks = tasks;
-        notifyItemRangeChanged(0, tasks.size());
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -28,7 +30,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
-        Task task = tasks.get(position);
+        TodoTaskData task = tasks.get(position);
         holder.bind(task);
     }
 
@@ -45,10 +47,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             this.binding = binding;
         }
 
-        public void bind(Task task) {
+        public void bind(TodoTaskData task) {
             binding.taskTitleTextView.setText(task.getTitle());
             binding.taskDescriptionTextView.setText(task.getDescription());
-            // Set the due date and other properties as needed
+            // Bind other properties if needed
+
+            //OnClickListener for the item
+            binding.getRoot().setOnClickListener(v -> {
+                Intent intent = new Intent(v.getContext(), TaskDetailActivity.class);
+                intent.putExtra("taskId", task.getId());
+                v.getContext().startActivity(intent);
+            });
         }
     }
 }

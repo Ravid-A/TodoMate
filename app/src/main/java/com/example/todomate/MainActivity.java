@@ -2,21 +2,27 @@ package com.example.todomate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todomate.adapter.TaskAdapter;
 import com.example.todomate.databinding.ActivityMainBinding;
 import com.example.todomate.viewmodel.TaskViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private TaskViewModel taskViewModel;
     private TaskAdapter taskAdapter;
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,24 +32,70 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
+        mAuth = FirebaseAuth.getInstance();
+
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         setupRecyclerView();
-        
+
         binding.fabAddTask.setOnClickListener(v -> showAddTaskActivity());
+        binding.fabRefresh.setOnClickListener(v -> onResume());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateTasks();
+        updateUI(mAuth.getCurrentUser());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_profile) {
+            // Handle profile action
+            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            return true;
+        } else if (id == R.id.action_sign_out) {
+            // Handle sign out action
+            mAuth.signOut();
+            updateUI(null);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupRecyclerView() {
-        RecyclerView recyclerView = binding.tasksRecyclerView;
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.tasksRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         taskAdapter = new TaskAdapter();
-        recyclerView.setAdapter(taskAdapter);
-
-        taskViewModel.getTasks().observe(this, tasks -> taskAdapter.setTasks(tasks));
+        binding.tasksRecyclerView.setAdapter(taskAdapter);
     }
-    
+
+    private void updateTasks() {
+        taskViewModel.getTasks().observe(this, tasks -> {
+            if (tasks != null) {
+                taskAdapter.setTasks(tasks);
+            }
+        });
+    }
+
     private void showAddTaskActivity() {
-        // Add an Intent to start the AddTaskActivity
         Intent intent = new Intent(this, AddTaskActivity.class);
         startActivity(intent);
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if (user == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
