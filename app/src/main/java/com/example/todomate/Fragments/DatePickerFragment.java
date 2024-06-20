@@ -1,4 +1,4 @@
-package com.example.todomate;
+package com.example.todomate.Fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import android.widget.DatePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.todomate.R;
 
 import java.util.Calendar;
 

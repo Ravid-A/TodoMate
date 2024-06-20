@@ -10,14 +10,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.todomate.databinding.ActivityAddTaskBinding;
 import com.example.todomate.model.TodoTask;
 import com.example.todomate.viewmodel.TaskViewModel;
-import com.example.todomate.DatePickerFragment;
+import com.example.todomate.Fragments.DatePickerFragment;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
-public class AddTaskActivity extends AppCompatActivity implements com.example.todomate.DatePickerFragment.OnDateSelectedListener {
+public class AddTaskActivity extends AppCompatActivity implements DatePickerFragment.OnDateSelectedListener {
 
     private ActivityAddTaskBinding binding;
     private TaskViewModel taskViewModel;
