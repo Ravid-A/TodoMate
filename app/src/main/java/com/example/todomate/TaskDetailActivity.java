@@ -1,10 +1,13 @@
 package com.example.todomate;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -142,6 +145,11 @@ public class TaskDetailActivity extends AppCompatActivity implements EditTaskFra
     }
 
     private void loadSetReminderFragment() {
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Please grant notification permission to set a reminder", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Create an instance of SetReminderFragment
         ReminderFragment setReminderFragment = new ReminderFragment();
 
