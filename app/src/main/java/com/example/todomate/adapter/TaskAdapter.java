@@ -11,7 +11,10 @@ import com.example.todomate.TaskDetailActivity;
 import com.example.todomate.databinding.ItemTaskBinding;
 import com.example.todomate.model.TodoTaskData;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
     private List<TodoTaskData> tasks;
@@ -50,7 +53,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         public void bind(TodoTaskData task) {
             binding.taskTitleTextView.setText(task.getTitle());
             binding.taskDescriptionTextView.setText(task.getDescription());
-            // Bind other properties if needed
+            binding.taskDueDateTextView.setText(getFormattedDate(task.getDueDate()));
 
             //OnClickListener for the item
             binding.getRoot().setOnClickListener(v -> {
@@ -58,6 +61,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                 intent.putExtra("taskId", task.getId());
                 v.getContext().startActivity(intent);
             });
+        }
+
+        private String getFormattedDate(long timeInMillis) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(timeInMillis);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+            return String.format("Due on %s", sdf.format(calendar.getTime()));
         }
     }
 }

@@ -3,6 +3,7 @@ package com.example.todomate;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.todomate.Fragments.EditTaskFragment;
@@ -77,6 +78,9 @@ public class TaskDetailActivity extends AppCompatActivity implements EditTaskFra
         bundle.putString("taskId", taskId);
         editTaskFragment.setArguments(bundle);
 
+        // Clear the back stack
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
         // Begin a fragment transaction
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -98,6 +102,9 @@ public class TaskDetailActivity extends AppCompatActivity implements EditTaskFra
         Bundle bundle = new Bundle();
         bundle.putLong("dueDate", taskData.getDueDate());
         setReminderFragment.setArguments(bundle);
+
+        // Clear the back stack
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         // Begin a fragment transaction
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
