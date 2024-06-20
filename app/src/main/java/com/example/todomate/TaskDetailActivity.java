@@ -1,6 +1,8 @@
 package com.example.todomate;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -12,10 +14,13 @@ import com.example.todomate.databinding.ActivityTaskDetailBinding;
 import com.example.todomate.model.TodoTask;
 import com.example.todomate.model.TodoTaskData;
 import com.example.todomate.viewmodel.TaskViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.function.Function;
 
 public class TaskDetailActivity extends AppCompatActivity implements EditTaskFragment.OnFragmentInteractionListener {
 
@@ -24,6 +29,14 @@ public class TaskDetailActivity extends AppCompatActivity implements EditTaskFra
     TodoTaskData taskData;
 
     private String taskId;
+
+    private final TaskViewModel taskViewModel;
+    private final FirebaseAuth mAuth;
+
+    public TaskDetailActivity() {
+        taskViewModel = new TaskViewModel();
+        mAuth = FirebaseAuth.getInstance();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +52,14 @@ public class TaskDetailActivity extends AppCompatActivity implements EditTaskFra
         // Update UI with task data
         updateUI();
 
-        binding.buttonEdit.setOnClickListener(v -> loadEditTaskFragment());
-        binding.buttonSetReminder.setOnClickListener(v -> loadSetReminderFragment());
+        binding.buttonEdit.setOnClickListener(v -> loadFragment(((Void) -> {
+            loadEditTaskFragment();
+            return null;
+        })));
+        binding.buttonSetReminder.setOnClickListener(v -> loadFragment(((Void) -> {
+            loadSetReminderFragment();
+            return null;
+        })));
     }
 
     private void updateUI() {
@@ -67,6 +86,34 @@ public class TaskDetailActivity extends AppCompatActivity implements EditTaskFra
         calendar.setTimeInMillis(timeInMillis);
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         return String.format("Due on %s", sdf.format(calendar.getTime()));
+    }
+
+    private void loadFragment(Function<Void, Void> function) {
+        taskViewModel.getTaskData(taskId).addOnCompleteListener(taskData -> {
+            if (taskData.isSuccessful()) {
+                TodoTask todoTask = taskData.getResult().toObject(TodoTask.class);
+
+                if (todoTask == null) {
+                    Log.d("TaskDetailActivity", "Task not found");
+                    Toast.makeText(this, "Task not found", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+
+                if(mAuth.getCurrentUser() != null && !mAuth.getCurrentUser().getUid().equals(todoTask.getUserId())) {
+                    Log.d("TaskDetailActivity", "Task is not yours");
+                    Toast.makeText(this, "Task is not yours", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+
+
+                function.apply(null);
+            } else{
+                Toast.makeText(this, Objects.requireNonNull(taskData.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
     }
 
     private void loadEditTaskFragment() {

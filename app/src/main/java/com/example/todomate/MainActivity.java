@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         binding.tasksRecyclerView.setAdapter(taskAdapter);
     }
 
-    private void updateTasks() {
+    public void updateTasks() {
         taskViewModel.getTasks().observe(this, tasks -> {
             if (tasks != null) {
                 taskAdapter.setTasks(tasks);
