@@ -1,20 +1,23 @@
 package com.example.todomate.Fragments;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.todomate.R;
+import com.example.todomate.receiver.ReminderBroadcastReceiver;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -24,6 +27,8 @@ public class ReminderFragment extends Fragment {
     private TimePicker timePicker;
 
     private Calendar dueDate;
+
+    private String taskId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +67,8 @@ public class ReminderFragment extends Fragment {
             long bundleLong = bundle.getLong("dueDate");
             dueDate = Calendar.getInstance();
             dueDate.setTimeInMillis(bundleLong);
+
+            taskId = bundle.getString("taskId");
         }
 
         return view;
@@ -76,8 +83,19 @@ public class ReminderFragment extends Fragment {
         timePicker.setCurrentMinute(currentMinute);
     }
 
+    @SuppressLint("ScheduleExactAlarm")
     private void setReminder(int hour, int minute) {
-        // This is where you would set the reminder in the app
-        // For simplicity, this example does not include the actual reminder logic
+        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(dueDate.getTimeInMillis());
+//        calendar.set(Calendar.HOUR_OF_DAY, hour);
+//        calendar.set(Calendar.MINUTE, minute);
+        calendar.add(Calendar.SECOND, 10);
+
+        AlarmManager alarmManager = (AlarmManager) requireContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(requireContext(), ReminderBroadcastReceiver.class);
+        intent.putExtra("taskId", taskId);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 }

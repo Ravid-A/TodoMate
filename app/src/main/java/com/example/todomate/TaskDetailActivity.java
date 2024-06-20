@@ -147,6 +147,7 @@ public class TaskDetailActivity extends AppCompatActivity implements EditTaskFra
 
         // Pass the due date to the fragment
         Bundle bundle = new Bundle();
+        bundle.putString("taskId", taskId);
         bundle.putLong("dueDate", taskData.getDueDate());
         setReminderFragment.setArguments(bundle);
 
