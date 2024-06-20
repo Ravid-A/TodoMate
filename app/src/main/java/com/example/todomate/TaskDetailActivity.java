@@ -124,9 +124,6 @@ public class TaskDetailActivity extends AppCompatActivity implements EditTaskFra
     }
 
     public void onFragmentClosed() {
-
-        System.out.println("Fragment closed");
-
         // Handle fragment closed event here
         // For example, refresh data or update UI
         updateUI(); // Example method to update UI after fragment is closed

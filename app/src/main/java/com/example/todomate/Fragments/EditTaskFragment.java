@@ -52,12 +52,14 @@ public class EditTaskFragment extends Fragment {
 
             taskViewModel.getTaskData(taskId).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    System.out.println("Task data: " + task.getResult().getData());
-
                     TodoTask todoTask = task.getResult().toObject(TodoTask.class);
                     taskData = null;
                     if (todoTask != null) {
                         taskData = new TodoTaskData(taskId, todoTask);
+
+                        // Update UI with task data
+                        editTextTitle.setText(taskData.getTitle());
+                        editTextDescription.setText(taskData.getDescription());
                     }
                 }
             });
